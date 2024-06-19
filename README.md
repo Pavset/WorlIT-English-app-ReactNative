@@ -12,12 +12,17 @@ World IT English — is a mobile application developed by World IT on the React 
  git clone https://github.com/yourusername/yourproject.git
 ```
 
-2. Change the url to your API
+2. Install dependencies:
+```bash
+ npm install --legacy-peer-deps
+```
+
+3. Change the url to your API
 ```js
 export const url = YOUR_URL
 ```
     
-3. Run the project
+4. Run the project
 ```bash
  npm run android    # For android
  npm run ios        # For ios
