@@ -3,7 +3,7 @@
 
 
 # React-Native For World IT English
-### API [here](myLib/README.md)
+### API [here](https://github.com/Pavset/WorlIT-English-app-API)
 World IT English — is a mobile application developed by World IT on the React Native platform. The application is designed to help users learn English through specialized courses focused on the IT industry.
 ## Installation
 
