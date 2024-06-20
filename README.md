@@ -4,6 +4,8 @@
 
 # React-Native For World IT English
 ### API [here](https://github.com/Pavset/WorlIT-English-app-API)
+### Figma [here](https://www.figma.com/design/aEzanbPToElnEwYgmRPONp/Untitled?node-id=132-582&t=XtuugYN4TjwqLilr-1)
+### FigJam [here](https://www.figma.com/board/ErOJZwu5ySTPJHghzrkTz3/Untitled?node-id=0-1&t=vJpjBLJrGrVonNJ9-1)
 World IT English — is a mobile application developed by World IT on the React Native platform. The application is designed to help users learn English through specialized courses focused on the IT industry.
 ## Installation
 
