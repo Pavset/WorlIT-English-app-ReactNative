@@ -14,7 +14,7 @@ export default function Test ({ navigation, route}){
     const [questionProgress, setQuestionProgress] = useState()
     const [module, setModule] = useState()
     const [questionStatuses, setQuestionStatuses] = useState()
-  
+    const [wordsId, setWordsId] = useState()
     let [answerStyle, setAnswerStyle] = useState([styles.white, styles.font20])
     const [questionMainTextStyle, setQuestionMainTextStyle] = useState([styles.white, styles.font24])
 
@@ -89,6 +89,7 @@ export default function Test ({ navigation, route}){
             setTask(await data.task)
             setQuestions(await data.data)
             setWordList(await data.words)
+            setWordsId(data.data.wordArray)
             setModule(await data.module)
             setQuestionProgress(await data.progress)
             setCompleted(await data.progress.completed)
@@ -381,7 +382,7 @@ export default function Test ({ navigation, route}){
         }
   
         {questions && questionProgress && questionProgress.progress &&
-          <NavigationPanelTest word={true} module={route.params.moduleName} wordList={wordList} navigation={navigation}/>
+          <NavigationPanelTest word={true} module={route.params.moduleName} wordsId={wordsId} navigation={navigation}/>
         }
       </View>
     )

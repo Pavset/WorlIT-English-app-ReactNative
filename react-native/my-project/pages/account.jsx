@@ -80,10 +80,10 @@ export default function Account({navigation}){
                   <Text style={[styles.orange,styles.font20]}>{teacherData.name}</Text>
                   <Text style={[styles.white,styles.font16]}>{teacherData.phone}</Text>
                   <View style={styles.socialsDiv}>
-                      <Text onPress={() => Linking.openURL(teacherData.tg)}> 
+                      <Text style={styles.socialsText} onPress={() => Linking.openURL(teacherData.tg)}> 
                         <Image style={styles.socials} source={ require("../assets/telegram.png") }/> 
                       </Text>
-                      <Text onPress={() => Linking.openURL(teacherData.viber)}> 
+                      <Text style={styles.socialsText}  onPress={() => Linking.openURL(teacherData.viber)}> 
                         <Image style={styles.socials} source={ require("../assets/viber.png") } />
                       </Text>
                       
@@ -102,10 +102,10 @@ export default function Account({navigation}){
                   <Text style={[styles.orange,styles.font20]}>{managerData.name}</Text>
                   <Text style={[styles.white,styles.font16]}>{managerData.phone}</Text>
                   <View style={styles.socialsDiv}>
-                      <Text onPress={() => Linking.openURL(managerData.tg)}> 
+                      <Text style={styles.socialsText} onPress={() => Linking.openURL(managerData.tg)}> 
                         <Image style={styles.socials} source={ require("../assets/telegram.png") }/> 
                       </Text>
-                      <Text onPress={() => Linking.openURL(managerData.viber)}> 
+                      <Text style={styles.socialsText} onPress={() => Linking.openURL(managerData.viber)}> 
                         <Image style={styles.socials} source={ require("../assets/viber.png") } />
                       </Text>
                   </View>

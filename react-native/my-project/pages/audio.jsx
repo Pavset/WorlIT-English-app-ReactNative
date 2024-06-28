@@ -10,7 +10,7 @@ export default function AudioPage({navigation, route}){
 
     const mediaAudioId = route.params.id
     const [AudioSRC, setAudioSRC] = useState()
-    const [wordList, setWordList] = useState()
+    const [wordsId, setWordsId] = useState()
     const [module, setModule] = useState()
     
     async function handleSubmit() {
@@ -24,7 +24,7 @@ export default function AudioPage({navigation, route}){
       .then(
         async data => {
           setAudioSRC(await data.data.audio)
-          setWordList(data.words)
+          setWordsId(data.data.wordArray)
           setModule(await data.module)
         }
       )
@@ -48,7 +48,7 @@ export default function AudioPage({navigation, route}){
         }
         
         {AudioSRC &&
-        <NavigationPanelTest word={true} module={route.params.moduleName} wordList={wordList} navigation={navigation}/>
+        <NavigationPanelTest word={true} module={route.params.moduleName} wordsId={wordsId} navigation={navigation}/>
         }
         
       </View>

@@ -250,8 +250,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'start',
     width: "100%",
     gap: 10,
-    padding: "2%",
-    boxSizing: "border-box",
+    padding: 10,
+    // boxSizing: "border-box",
     borderRadius: 10
   },
   profileSectorImage:{
@@ -282,7 +282,18 @@ export const styles = StyleSheet.create({
     width: "100%",
     gap: 10,
     padding: 0,
-    boxSizing: "border-box",
+  },
+  socials:{
+    height:20,
+    width:20,
+  },
+  socialsText:{
+    display: "flex",
+    alignItems: 'center',
+    justifyContent: 'center',
+    height:30,
+    // margin:5,
+    // backgroundColor:"#fff"
   },
   forExitButton:{
     display: "flex",
@@ -508,22 +519,18 @@ export const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   buttonAnswer:{
-    flex: 1, 
-    display:"flex",
-    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    // paddingVertical: 20,
-    // paddingHorizontal: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
     backgroundColor: '#252124',
     borderWidth: 2,
     borderColor: '#E8F0FE',
     borderRadius: 15,
-    minWidth: "40%",
-    maxHeight: "30%",
-    marginHorizontal: 10,
-    marginVertical: 20,
-    // alignSelf:"stretch"
+    flexBasis: '45%', 
+    marginVertical: 5,
+    marginHorizontal: 5,
+    alignItems: 'center',
   },
   removeButton:{
     display:"flex",
@@ -545,6 +552,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     maxHeight:"40%",
+    height:"40%"
   },
   viewForAnswers:{
     width: '90%', 
@@ -554,7 +562,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flexWrap:"wrap",
     maxHeight:"55%",
-    alignContent:"stretch"
+    height:"55%",
+    alignItems: 'stretch',
+    alignContent:"stretch",
   },
   viewForCounter:{
     display: "flex",

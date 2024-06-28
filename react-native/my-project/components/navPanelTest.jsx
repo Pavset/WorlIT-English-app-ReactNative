@@ -1,13 +1,13 @@
 import { StyleSheet, View, Pressable, Image } from 'react-native';
 
-export default function NavigationPanelTest({word,navigation, wordList,module}){
+export default function NavigationPanelTest({word,navigation, wordsId,module}){
   if (word){
     return(
       <View style={styles.navBar}>
         <Pressable style={styles.button} onPress={()=>{navigation.navigate("Modules")}}>
           <Image style={styles.buttonImage} source={{ uri: "https://i.postimg.cc/yDjWf9xt/icons8-back-96.png" }}/>
         </Pressable >
-        <Pressable style={styles.button} onPress={()=>{navigation.navigate("Words",{words : wordList, moduleName: module})}}>
+        <Pressable style={styles.button} onPress={()=>{navigation.navigate("Words",{words : wordsId, moduleName: module})}}>
           <Image style={styles.buttonImage} source={{ uri: "https://i.postimg.cc/zVnyg4rJ/icons8-document-96.png" }}/>
         </Pressable >
       </View>

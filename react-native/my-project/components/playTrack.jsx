@@ -83,19 +83,19 @@ export default function AudioBar({url}) {
 
       <HStack space={4} justifyContent="center">
         <TouchableOpacity onPress={rewindBack}>
-          <Image source = {require=("../assets/15back.png")} style = {styles.image} />
+          <Image source = {{uri:"https://i.ibb.co/bXDLztn/15back.png"}} style = {styles.image} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={rewindForward} >
-          <Image source = {require=("../assets/15forward.png")} style = {styles.image} />
+          <Image source = {{uri:"https://i.ibb.co/zn3W73y/15forward.png"}} style = {styles.image} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={stopSound} >
-          <Image source = {require=("../assets/toBeggining.png")} style = {styles.image} />
+          <Image source = {{uri:"https://i.ibb.co/ZXK3CSc/to-Beggining.png"}} style = {styles.image} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={!started ? playSound : pauseSound} >
-          <Image source = { isPlay ? require=("../assets/pause.png"):require=("../assets/unpause.png")} style = {styles.image} />
+          <Image source = { isPlay ? {uri:"https://i.ibb.co/Scy1RKm/pause.png"}:{uri:"https://i.ibb.co/dLDFfd8/unpause.png"}} style = {styles.image} />
         </TouchableOpacity>
 
       </HStack>

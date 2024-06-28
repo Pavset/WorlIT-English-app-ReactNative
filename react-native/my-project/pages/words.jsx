@@ -5,27 +5,48 @@ import NavigationPanelTest from "../components/navPanelTest"
 import {url, styles} from "../App.js"
 
 export default function Words({navigation, route}) {
-    const words = route.params.words
     const moduleName = route.params.moduleName
     const [noun, setNouns] = useState([])
     const [adj, setAdjs] = useState([])
     const [verb, setVerbs] = useState([])
     const [other, setOthers] = useState([])
-  
-    useEffect(()=>{
-      
-      words.map((v,i)=>{
-        if (v.role == 'Іменник'){
-          setNouns(noun => [...noun, [v.word, v.translated]]);
-        }else if (v.role == 'Прикметник'){
-          setAdjs(adj => [...adj, [v.word, v.translated]]);
-        }else if (v.role == "Дієслово"){
-          setVerbs(verb => [...verb, [v.word, v.translated]]);
-        }else{
-          setOthers(other => [...other, [v.word, v.translated]]);
+    const [words, setWords] = useState([])
+    async function handleSubmit(id) {
+      console.log("Route: ", route.params)
+      fetch(`${url}/wordCounters/${id}`,{
+        method: 'GET',
+        headers: {
+          "token": await AsyncStorage.getItem('apikey')
         }
       })
-    },[words])
+      .then((response)=> response.json())
+      .then((data) => {
+        setWords(data.listOfWords)
+        console.warn("What did I get?", data)
+        data.listOfWords.map((v,i)=>{
+          console.log(v)
+          if (v.role == 'Іменник'){
+            setNouns(noun => [...noun, [v.word, v.translated]]);
+          }else if (v.role == 'Прикметник'){
+            setAdjs(adj => [...adj, [v.word, v.translated]]);
+          }else if (v.role == "Дієслово"){
+            setVerbs(verb => [...verb, [v.word, v.translated]]);
+          }else{
+            setOthers(other => [...other, [v.word, v.translated]]);
+          }
+        })
+      })
+      .catch(async (err)=>{
+        await navigation.navigate("Error")
+      })
+    }
+  
+    useEffect(()=>{
+      handleSubmit(route.params.wordsId)
+    },[route.params.wordsId])
+
+
+
     return(
       <View style={styles.profileContainer}>
         <View style={{backgroundColor: "#252124", width: '100%', height: 50, justifyContent: 'center', alignItems: "center"}}>

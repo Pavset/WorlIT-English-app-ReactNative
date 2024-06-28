@@ -16,7 +16,7 @@ export default function WordTest ({ navigation, route}){
     const [randomWordListId, setRandomWordListId] = useState()
     const [wordsCounters, setWordsCounters] = useState()
     const [qqq, setqqq] = useState()
-
+    const [wordsId, setWordsId] = useState()
     let groupedQuestions
     let qStat
     const [answerStyle, setAnswerStyle] = useState([styles.white, styles.font20])
@@ -61,6 +61,7 @@ export default function WordTest ({ navigation, route}){
         }
       }
       if (Object.keys(allQuestions).length > 0 || allQuestions != null){
+        console.log("Return Questions")
         return allQuestions
       } else{
         completeTask()
@@ -87,25 +88,34 @@ export default function WordTest ({ navigation, route}){
       .then(response => response.json())
       .then(
         async data => {
+          
           if (!data.error){
-            setTask(await data.task)
 
+            setTask(await data.task)
             groupedQuestions = await groupByWordId(data.data);
+
             qStat = await data.questionsStatuses
 
             groupedQuestions = uncompletedQPonly(groupedQuestions, qStat)
-            setQuestions(groupedQuestions)
+            console.log(groupedQuestions)
+            if (groupedQuestions){
+              setQuestions(await groupedQuestions)
+            }
+
+
             if(Object.keys(groupedQuestions).length <= 0 || await groupedQuestions == null){
+
               completeTask()
               navigation.navigate("Modules")
             } 
-            let rd = getRandomElement(Object.keys(await groupedQuestions))
             
+            let rd = getRandomElement(Object.keys(await groupedQuestions))
+
             setRandomWordListId(rd)
             setWordList(await data.words)
             setQuestionProgress(await data.progress)
             setCompleted(await data.progress.completed)
-
+            setWordsId(data.data.wordArray)
             setAnswerStyle([styles.white, styles.font20])
             let usWords = data.usersWords
             setWordsCounters(data.usersWords)
@@ -152,10 +162,13 @@ export default function WordTest ({ navigation, route}){
       .then(
         async data => {
           setQuestionProgress(await data.progress.progress)
-          getInfoOfTask()
-          if(await questionProgress.progress > await questions.length){
+          if(await questionProgress.progress >= await questions.length){
             navigation.navigate("Modules")
+          }else{
+            getInfoOfTask()
           }
+          
+
         }
       )
       .catch(async (err)=>{
@@ -207,7 +220,7 @@ export default function WordTest ({ navigation, route}){
           </View>
         }
    
-        {questions && questionProgress && randomWordListId && wordsCounters && 
+        {questions && questionProgress && randomWordListId && wordsCounters && wordsCounters[qqq] &&
         <View style={styles.questionsView}>
           <View style={styles.viewForQuestions}>
             { questions && wordsCounters && wordsCounters[qqq].counter && questions[randomWordListId] &&
@@ -225,25 +238,32 @@ export default function WordTest ({ navigation, route}){
                 })}
               </View>
             }
-            { questions && wordsCounters && questions[randomWordListId][wordsCounters[qqq].counter-1].extraQuestionText && 
+            { questions && wordsCounters && questions[randomWordListId][wordsCounters[qqq].counter-1] && questions[randomWordListId][wordsCounters[qqq].counter-1].extraQuestionText && 
               <Text style={[styles.white, styles.font20]}>{questions[randomWordListId][wordsCounters[qqq].counter-1].extraQuestionText}</Text>
             }
-            { questions && wordsCounters && questions[randomWordListId][wordsCounters[qqq].counter-1].imagePath &&
+            { questions && wordsCounters && questions[randomWordListId][wordsCounters[qqq].counter-1] && questions[randomWordListId][wordsCounters[qqq].counter-1].imagePath &&
               <FullWidthImage imageUrl={questions[randomWordListId][wordsCounters[qqq].counter-1].imagePath}/>
             }
-            { questions && wordsCounters && questions[randomWordListId][wordsCounters[qqq].counter-1].question && 
+            { questions && wordsCounters && questions[randomWordListId][wordsCounters[qqq].counter-1] && questions[randomWordListId][wordsCounters[qqq].counter-1].question && 
               <Text style={[styles.white, styles.font24]}>{questions[randomWordListId][wordsCounters[qqq].counter-1].question}</Text>
             }
           </View>
           
           <View style={styles.viewForAnswers}>
-            { questions[randomWordListId][wordsCounters[qqq].counter-1].wrongAnswers.map((answer, idx) =>{
-              answersList.push(answer)
-              if (!answersList.includes(questions[randomWordListId][wordsCounters[qqq].counter-1].trueAnswers[0])){
-                answersList.push(questions[randomWordListId][wordsCounters[qqq].counter-1].trueAnswers[0])
-              }
-              shuffleAnswers(answersList)
-            })}
+            {questions[randomWordListId][wordsCounters[qqq].counter-1] &&
+            <View>
+                                      { questions[randomWordListId][wordsCounters[qqq].counter-1].wrongAnswers.map((answer, idx) =>{
+                          answersList.push(answer)
+                          if (!answersList.includes(questions[randomWordListId][wordsCounters[qqq].counter-1].trueAnswers[0])){
+                            answersList.push(questions[randomWordListId][wordsCounters[qqq].counter-1].trueAnswers[0])
+                          }
+                          shuffleAnswers(answersList)
+                        })}
+            </View>
+            
+
+            }
+
             {answersList.map((ans, idx) =>{
                 let answerStyleExtra = []
                 if (questions[randomWordListId][wordsCounters[qqq].counter-1].trueAnswers[0] == ans){
@@ -272,7 +292,7 @@ export default function WordTest ({ navigation, route}){
         }
   
         {questions && 
-          <NavigationPanelTest word={true} module={route.params.moduleName} wordList={wordList} navigation={navigation}/>
+          <NavigationPanelTest word={true} module={route.params.moduleName} wordsId={wordsId} navigation={navigation}/>
         }
       </View>
     )

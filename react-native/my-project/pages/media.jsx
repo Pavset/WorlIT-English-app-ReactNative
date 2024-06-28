@@ -8,7 +8,7 @@ import {url, styles} from "../App.js"
 export default function Media ({ navigation, route}){
     const [mediaUrl,setMediaUrl] = useState()
     const mediaId = route.params.id
-    const [wordList, setWordList] = useState()
+    const [wordsId, setWordsId] = useState()
     const [module, setModule] = useState()
   
   
@@ -28,7 +28,7 @@ export default function Media ({ navigation, route}){
             } else if (data.data.type == 'audio'){
               setMediaUrl(data.data.audio)
             }
-            setWordList(data.words)
+            setWordsId(data.data.wordArray)
             setModule(await data.module)
           }
   
@@ -54,7 +54,7 @@ export default function Media ({ navigation, route}){
         }
         
         {mediaUrl &&
-          <NavigationPanelTest word={true} module={route.params.moduleName} wordList={wordList} navigation={navigation}/>
+          <NavigationPanelTest word={true} module={route.params.moduleName} wordsId={wordsId} navigation={navigation}/>
         }
         
         

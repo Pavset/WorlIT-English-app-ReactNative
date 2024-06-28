@@ -1,18 +1,23 @@
-import { Text, View, TouchableOpacity, Image } from 'react-native';
+import { Text, View, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import {url, styles} from "../App.js"
-
+import { useState } from 'react';
 export default function Error({navigation}) {
+  const [loading, setLoading] = useState(false)
+
   async function handleSubmit(){
+    setLoading(true)
     fetch(`${url}/`, {
       method: "GET"
     })
     .then((response)=> response.json())
     .then(
       async data =>{
+        setLoading(false)
         await navigation.replace("Account")
       }
     )
     .catch(async (err)=>{
+      setLoading(false)
       await navigation.navigate("Error")
     })
   }
@@ -34,7 +39,16 @@ export default function Error({navigation}) {
               />
               
               <Text style={[styles.white, styles.font24]}>Немає підключення до серверу</Text>
-              <TouchableOpacity style={styles.orangeButton} onPress={()=>{handleSubmit()}}><Text style={[styles.black, styles.font24]}>Повторити</Text></TouchableOpacity>
+              {!loading &&
+                <TouchableOpacity disabled={loading} style={styles.orangeButton} onPress={()=>{handleSubmit()}}>
+                  <Text style={[styles.black, styles.font24]}>Повторити</Text>
+                </TouchableOpacity>
+              }
+              {loading &&
+                <TouchableOpacity disabled={loading} style={styles.orangeButton} onPress={()=>{handleSubmit()}}>
+                  <ActivityIndicator size="large" color="#000000"/>
+                </TouchableOpacity>
+              }
           </View>
 
       </View>
