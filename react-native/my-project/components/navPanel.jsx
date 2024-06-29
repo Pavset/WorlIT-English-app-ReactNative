@@ -15,9 +15,7 @@ export default function NavigationPanel({navigation}){
 
 const styles = StyleSheet.create({
     navBar: {
-      position:"absolute",
       display:"flex",
-      flex: 1,
       backgroundColor: '#252124',
       flexDirection:"row",
       alignItems: 'center',

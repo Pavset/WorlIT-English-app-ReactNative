@@ -1,8 +1,7 @@
-import { StyleSheet, Text, View, LogBox, TouchableOpacity, TextInput, Image, Linking, ScrollView, StatusBar,ActivityIndicator } from 'react-native';
+import { Text, View, TouchableOpacity, Image,ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
 import NavigationPanelTest from "../components/navPanelTest"
-import FullWidthImage from "../components/fullWidthImage"
 import {url, styles} from "../App.js"
 
 export default function WordTest ({ navigation, route}){
@@ -29,44 +28,55 @@ export default function WordTest ({ navigation, route}){
     }
 
     function groupByWordId(arrayOfQuestions) {
+      if (arrayOfQuestions){
         return arrayOfQuestions.reduce((acc, obj) => {
-            const { wordId } = obj;
-            if (!acc[wordId]) {
-                acc[wordId] = [];
-            }
-            acc[wordId].push(obj);
-            return acc;
-        }, {});
+          const { wordId } = obj;
+          if (!acc[wordId]) {
+              acc[wordId] = [];
+          }
+          acc[wordId].push(obj);
+          return acc;
+      }, {});
+      }else{
+        return null
+      }
+
     };
 
     function uncompletedQPonly(allQuestions, statusesOfQuestions){
-      for (let id of Object.keys(allQuestions)){
+      
+      if (allQuestions){
+        for (let id of Object.keys(allQuestions)){
 
-        let counter = allQuestions[id].length
-
-        for (let question of allQuestions[id]){
-
-          for(let statId of statusesOfQuestions){
-            if (question.id == statId.QuestionId){
-              if(statId.correct){
-                counter -= 1
+          let counter = allQuestions[id].length
+  
+          for (let question of allQuestions[id]){
+  
+            for(let statId of statusesOfQuestions){
+              if (question.id == statId.QuestionId){
+                if(statId.correct){
+                  counter -= 1
+                }
               }
             }
+  
           }
-
+  
+          if (counter == 0){
+            delete allQuestions[id]
+          }
         }
-
-        if (counter == 0){
-          delete allQuestions[id]
+        if (Object.keys(allQuestions).length > 0 || allQuestions){
+          return allQuestions
+        } else{
+          completeTask()
+          navigation.navigate("Modules")
         }
-      }
-      if (Object.keys(allQuestions).length > 0 || allQuestions != null){
-        console.log("Return Questions")
-        return allQuestions
-      } else{
+      }else{
         completeTask()
         navigation.navigate("Modules")
       }
+
     }
 
     function getRandomElement(array) {
@@ -97,37 +107,41 @@ export default function WordTest ({ navigation, route}){
             qStat = await data.questionsStatuses
 
             groupedQuestions = uncompletedQPonly(groupedQuestions, qStat)
-            console.log(groupedQuestions)
-            if (groupedQuestions){
-              setQuestions(await groupedQuestions)
-            }
+            
+            setQuestions(await groupedQuestions)
+            try {
+              console.warn(typeof groupedQuestions)
+              if(Object.keys(groupedQuestions).length <= 0 || await groupedQuestions == null){
 
+                completeTask()
+                navigation.navigate("Modules")
+              } 
+              let rd = getRandomElement(Object.keys(await groupedQuestions))
 
-            if(Object.keys(groupedQuestions).length <= 0 || await groupedQuestions == null){
-
+              setRandomWordListId(rd)
+              setWordList(await data.words)
+              setQuestionProgress(await data.progress)
+              setCompleted(await data.progress.completed)
+              setWordsId(data.data.wordArray)
+              setAnswerStyle([styles.white, styles.font20])
+              let usWords = data.usersWords
+              setWordsCounters(data.usersWords)
+  
+              await usWords.map((elem,key)=>{
+                if(elem.WordId == rd){
+                  rdNew = key
+                }
+              })
+  
+              setqqq(rdNew)
+            } catch (error) {
               completeTask()
               navigation.navigate("Modules")
-            } 
+            }
+
             
-            let rd = getRandomElement(Object.keys(await groupedQuestions))
 
-            setRandomWordListId(rd)
-            setWordList(await data.words)
-            setQuestionProgress(await data.progress)
-            setCompleted(await data.progress.completed)
-            setWordsId(data.data.wordArray)
-            setAnswerStyle([styles.white, styles.font20])
-            let usWords = data.usersWords
-            setWordsCounters(data.usersWords)
-
-            await usWords.map((elem,key)=>{
-              if(elem.WordId == rd){
-                rdNew = key
-              }
-            })
-
-            setqqq(rdNew)
-
+            
             if(data.progress.progress > data.data.length){
               completeTask()
               navigation.navigate("Modules")
@@ -242,7 +256,12 @@ export default function WordTest ({ navigation, route}){
               <Text style={[styles.white, styles.font20]}>{questions[randomWordListId][wordsCounters[qqq].counter-1].extraQuestionText}</Text>
             }
             { questions && wordsCounters && questions[randomWordListId][wordsCounters[qqq].counter-1] && questions[randomWordListId][wordsCounters[qqq].counter-1].imagePath &&
-              <FullWidthImage imageUrl={questions[randomWordListId][wordsCounters[qqq].counter-1].imagePath}/>
+              <Image
+                source={{
+                  uri: questions[randomWordListId][wordsCounters[qqq].counter-1].imagePath
+                }}
+                style={{height: 100, width: 200,resizeMode: 'contain'}}
+              />
             }
             { questions && wordsCounters && questions[randomWordListId][wordsCounters[qqq].counter-1] && questions[randomWordListId][wordsCounters[qqq].counter-1].question && 
               <Text style={[styles.white, styles.font24]}>{questions[randomWordListId][wordsCounters[qqq].counter-1].question}</Text>

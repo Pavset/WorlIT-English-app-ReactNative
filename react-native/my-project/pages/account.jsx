@@ -130,8 +130,6 @@ export default function Account({navigation}){
   
         <View style={[styles.profileContainer,{justifyContent: "center", alignItems: "center"}]}>
           <ActivityIndicator size="large" color="#e19a38"/>
-          
-          <NavigationPanel navigation={navigation}/>
         </View>
       )
     }

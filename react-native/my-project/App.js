@@ -14,6 +14,7 @@ import Theory from './pages/theory';
 import Words from './pages/words';
 import WordTest from "./pages/wordTest"
 import Error from "./pages/error"
+
 const Stack = createNativeStackNavigator()
 
 export const url = "https://worlit-english-app-api.onrender.com"
