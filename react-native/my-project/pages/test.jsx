@@ -89,7 +89,7 @@ export default function Test ({ navigation, route}){
             setTask(await data.task)
             setQuestions(await data.data)
             setWordList(await data.words)
-            setWordsId(data.data.wordArray)
+            setWordsId(await data.task.wordArray)
             setModule(await data.module)
             setQuestionProgress(await data.progress)
             setCompleted(await data.progress.completed)
@@ -103,9 +103,9 @@ export default function Test ({ navigation, route}){
               }
               
               setImagePath(mmmm.imagePath)
-              console.log(mmmm)
+
             }
-            console.log(data)
+
             
             if(data.progress.progress > data.data.length){
               completeTask()
@@ -135,7 +135,7 @@ export default function Test ({ navigation, route}){
           setQuestionProgress(await data.progress.progress)
           getInfoOfTask()
 
-          console.log(data.progress.progress)
+
           
           if(await questionProgress.progress > await questions.length){
             navigation.navigate("Modules")
@@ -205,7 +205,12 @@ export default function Test ({ navigation, route}){
               <Text style={[styles.orange, styles.font24]}>{extraQuestionText}</Text>
             }
             { questions[questionProgress.progress-1].imagePath &&
-              <FullWidthImage imageUrl={imagePath}/>
+              <Image
+              source={{
+                uri: imagePath
+              }}
+              style={{height: 100, width: 200,resizeMode: 'contain'}}
+              />
             }
             { questions[questionProgress.progress-1].question && dotsCounter > 0 &&
               <View style={styles.multipleInputView}>
@@ -304,7 +309,7 @@ export default function Test ({ navigation, route}){
                 if(answer.length > 0){
 
                   let replacedQuestion = questionMainText.replace("...", answer)
-                  console.log(replacedQuestion)
+
                   setQuestionMainText(replacedQuestion)
                   
                   if(answer.toLowerCase() == questions[questionProgress.progress-1].trueAnswers[0]){
@@ -381,7 +386,7 @@ export default function Test ({ navigation, route}){
 
         }
   
-        {questions && questionProgress && questionProgress.progress &&
+        {questions && questionProgress && questionProgress.progress && wordsId &&
           <NavigationPanelTest word={true} module={route.params.moduleName} wordsId={wordsId} navigation={navigation}/>
         }
       </View>

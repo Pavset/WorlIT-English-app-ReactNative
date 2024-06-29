@@ -24,7 +24,7 @@ export default function AudioPage({navigation, route}){
       .then(
         async data => {
           setAudioSRC(await data.data.audio)
-          setWordsId(data.data.wordArray)
+          setWordsId(await data.data.wordArray)
           setModule(await data.module)
         }
       )
@@ -47,7 +47,7 @@ export default function AudioPage({navigation, route}){
         <AudioBar url ={AudioSRC}/>
         }
         
-        {AudioSRC &&
+        {AudioSRC && wordsId &&
         <NavigationPanelTest word={true} module={route.params.moduleName} wordsId={wordsId} navigation={navigation}/>
         }
         

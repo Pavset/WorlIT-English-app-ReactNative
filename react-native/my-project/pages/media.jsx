@@ -28,7 +28,8 @@ export default function Media ({ navigation, route}){
             } else if (data.data.type == 'audio'){
               setMediaUrl(data.data.audio)
             }
-            setWordsId(data.data.wordArray)
+            
+            setWordsId(await data.data.wordArray)
             setModule(await data.module)
           }
   
@@ -53,7 +54,7 @@ export default function Media ({ navigation, route}){
            <VideoScreen videoSource={mediaUrl}/>
         }
         
-        {mediaUrl &&
+        {mediaUrl && wordsId &&
           <NavigationPanelTest word={true} module={route.params.moduleName} wordsId={wordsId} navigation={navigation}/>
         }
         

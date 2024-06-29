@@ -1,4 +1,4 @@
-import { StyleSheet, LogBox } from 'react-native';
+import { StyleSheet, LogBox,StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import Account from './pages/account';
@@ -19,6 +19,7 @@ const Stack = createNativeStackNavigator()
 
 export const url = "https://worlit-english-app-api.onrender.com"
 LogBox.ignoreAllLogs();
+StatusBar.setHidden(true);
 
 export default function App() {
   return (

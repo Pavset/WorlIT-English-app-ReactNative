@@ -22,196 +22,197 @@ export default function WordTest ({ navigation, route}){
     let answersList = [] 
     let rdNew 
 
+  function shuffleAnswers(arr) {
+    arr.sort(() => Math.random() - 0.5);
+  }
 
-    function shuffleAnswers(arr) {
-      arr.sort(() => Math.random() - 0.5);
+  function groupByWordId(arrayOfQuestions) {
+    if (arrayOfQuestions){
+      return arrayOfQuestions.reduce((acc, obj) => {
+        const { wordId } = obj;
+        if (!acc[wordId]) {
+            acc[wordId] = [];
+        }
+        acc[wordId].push(obj);
+        return acc;
+    }, {});
+    }else{
+      return null
     }
 
-    function groupByWordId(arrayOfQuestions) {
-      if (arrayOfQuestions){
-        return arrayOfQuestions.reduce((acc, obj) => {
-          const { wordId } = obj;
-          if (!acc[wordId]) {
-              acc[wordId] = [];
-          }
-          acc[wordId].push(obj);
-          return acc;
-      }, {});
-      }else{
-        return null
-      }
+  };
 
-    };
+  function uncompletedQPonly(allQuestions, statusesOfQuestions){
 
-    function uncompletedQPonly(allQuestions, statusesOfQuestions){
-      
-      if (allQuestions){
-        for (let id of Object.keys(allQuestions)){
+    if (allQuestions){
+      for (let id of Object.keys(allQuestions)){
 
-          let counter = allQuestions[id].length
-  
-          for (let question of allQuestions[id]){
-  
-            for(let statId of statusesOfQuestions){
-              if (question.id == statId.QuestionId){
-                if(statId.correct){
-                  counter -= 1
-                }
+        let counter = allQuestions[id].length
+
+        for (let question of allQuestions[id]){
+
+          for(let statId of statusesOfQuestions){
+            if (question.id == statId.QuestionId){
+              if(statId.correct){
+                counter -= 1
               }
             }
-  
           }
-  
-          if (counter == 0){
-            delete allQuestions[id]
-          }
+
         }
-        if (Object.keys(allQuestions).length > 0 || allQuestions){
-          return allQuestions
-        } else{
-          completeTask()
-          navigation.navigate("Modules")
+
+        if (counter == 0){
+          delete allQuestions[id]
         }
-      }else{
+      }
+      if (Object.keys(allQuestions).length > 0 || allQuestions){
+        return allQuestions
+      } else{
         completeTask()
         navigation.navigate("Modules")
       }
-
+    }else{
+      completeTask()
+      navigation.navigate("Modules")
     }
 
-    function getRandomElement(array) {
-        // Generate a random index
-        const randomIndex = Math.floor(Math.random() * array.length);
-        // Use array destructuring to directly extract the random element
-        const randomElement = array[randomIndex];
-        return randomElement;
-    }
-    
-    
-    async function getInfoOfTask() {
-      fetch(`${url}/tasks/${testId}`,{
-        method: "GET",
-        headers:{
-          "token": await AsyncStorage.getItem('apikey')
-        }
-      })
-      .then(response => response.json())
-      .then(
-        async data => {
+  }
+
+  function getRandomElement(array) {
+      // Generate a random index
+      const randomIndex = Math.floor(Math.random() * array.length);
+      // Use array destructuring to directly extract the random element
+      const randomElement = array[randomIndex];
+      return randomElement;
+  }
+  
+  
+  async function getInfoOfTask() {
+
+    fetch(`${url}/tasks/${testId}`,{
+      method: "GET",
+      headers:{
+        "token": await AsyncStorage.getItem('apikey')
+      }
+    })
+    .then(response => response.json())
+    .then(
+      async data => {
+        
+        if (!data.error){
+
+          setTask(await data.task)
+          groupedQuestions = await groupByWordId(data.data);
+
+          qStat = await data.questionsStatuses
+
+          // groupedQuestions = 
+
+          setQuestions(await uncompletedQPonly(groupedQuestions, qStat))
+
+
+            if(Object.keys(groupedQuestions).length <= 0 || await groupedQuestions == null){
+
+              completeTask()
+              navigation.navigate("Modules")
+            } 
+            let rd = getRandomElement(Object.keys(await groupedQuestions))
+
+            setRandomWordListId(rd)
+            setWordList(await data.words)
+            setQuestionProgress(await data.progress)
+            setCompleted(await data.progress.completed)
+
+            setWordsId(await data.task.wordArray)
+            setAnswerStyle([styles.white, styles.font20])
+            let usWords = data.usersWords
+            setWordsCounters(data.usersWords)
+
+            await usWords.map((elem,key)=>{
+              if(elem.WordId == rd){
+                rdNew = key
+              }
+            })
+
+            setqqq(rdNew)
+
           
-          if (!data.error){
 
-            setTask(await data.task)
-            groupedQuestions = await groupByWordId(data.data);
-
-            qStat = await data.questionsStatuses
-
-            groupedQuestions = uncompletedQPonly(groupedQuestions, qStat)
-            
-            setQuestions(await groupedQuestions)
-            try {
-              console.warn(typeof groupedQuestions)
-              if(Object.keys(groupedQuestions).length <= 0 || await groupedQuestions == null){
-
-                completeTask()
-                navigation.navigate("Modules")
-              } 
-              let rd = getRandomElement(Object.keys(await groupedQuestions))
-
-              setRandomWordListId(rd)
-              setWordList(await data.words)
-              setQuestionProgress(await data.progress)
-              setCompleted(await data.progress.completed)
-              setWordsId(data.data.wordArray)
-              setAnswerStyle([styles.white, styles.font20])
-              let usWords = data.usersWords
-              setWordsCounters(data.usersWords)
-  
-              await usWords.map((elem,key)=>{
-                if(elem.WordId == rd){
-                  rdNew = key
-                }
-              })
-  
-              setqqq(rdNew)
-            } catch (error) {
-              completeTask()
-              navigation.navigate("Modules")
-            }
-
-            
-
-            
-            if(data.progress.progress > data.data.length){
-              completeTask()
-              navigation.navigate("Modules")
-            }
-
-          }else{
-            setError(data.error)
-          }
-  
-        }
-      )
-      .catch(async (err)=>{
-        console.error(err)
-        await navigation.navigate("Error")
-      })
-    }
-  
-    async function updateProgresId(newProg, correct,wordId, questionId) {
-      fetch(`${url}/taskProgress/${testId}/${newProg}/${correct}`,{
-        method: "PUT",
-        headers:{
-          "token": await AsyncStorage.getItem('apikey'),
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          wordId: wordId,
-          questionId: questionId
-        })
-      })
-      .then(response => response.json())
-      .then(
-        async data => {
-          setQuestionProgress(await data.progress.progress)
-          if(await questionProgress.progress >= await questions.length){
+          
+          if(data.progress.progress > data.data.length){
+            completeTask()
             navigation.navigate("Modules")
-          }else{
-            getInfoOfTask()
           }
-          
 
+        }else{
+          setError(data.error)
         }
-      )
-      .catch(async (err)=>{
-        console.error(err)
 
-        await navigation.navigate("Error")
-      })
-    }
+      }
+    )
+    .catch(async (err)=>{
+      console.error(err)
+      await navigation.navigate("Error")
+    })
+  }
 
-  
-    async function completeTask(){
-      fetch(`${url}/complete/${testId}`,{
-        method: "PUT",
-        headers:{
-          "token": await AsyncStorage.getItem('apikey')
-        }
+  async function updateProgresId(newProg, correct,wordId, questionId) {
+
+    fetch(`${url}/taskProgress/${testId}/${newProg}/${correct}`,{
+      method: "PUT",
+      headers:{
+        "token": await AsyncStorage.getItem('apikey'),
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        wordId: wordId,
+        questionId: questionId
       })
-      .then(response => response.json())
-      .then(
-        async data => {
-          setCompleted(true)
+    })
+    .then(response => response.json())
+    .then(
+      async data => {
+        setQuestionProgress(await data.progress.progress)
+        if(await questionProgress.progress >= await questions.length){
+          navigation.navigate("Modules")
+        }else{
+          getInfoOfTask()
         }
-      )
-      .catch(async (err)=>{
-        console.error(err)
-        await navigation.navigate("Error")
-      })
-    }
-    useEffect(()=>{getInfoOfTask()},[testId])
+        
+
+      }
+    )
+    .catch(async (err)=>{
+      console.error(err)
+
+      await navigation.navigate("Error")
+    })
+  }
+
+
+  async function completeTask(){
+    fetch(`${url}/complete/${testId}`,{
+      method: "PUT",
+      headers:{
+        "token": await AsyncStorage.getItem('apikey')
+      }
+    })
+    .then(response => response.json())
+    .then(
+      async data => {
+        setCompleted(true)
+      }
+    )
+    .catch(async (err)=>{
+      console.error(err)
+      await navigation.navigate("Error")
+    })
+  }
+  useEffect(()=>{getInfoOfTask()},[testId])
+
+  try {
+
     return(
       <View style={styles.profileContainer}>
         <View style={[styles.orangeBG,{width: "100%", height: 30}]}></View>
@@ -234,7 +235,7 @@ export default function WordTest ({ navigation, route}){
           </View>
         }
    
-        {questions && questionProgress && randomWordListId && wordsCounters && wordsCounters[qqq] &&
+        {questions && questionProgress && randomWordListId && wordsCounters && wordsCounters[qqq]  &&
         <View style={styles.questionsView}>
           <View style={styles.viewForQuestions}>
             { questions && wordsCounters && wordsCounters[qqq].counter && questions[randomWordListId] &&
@@ -310,10 +311,13 @@ export default function WordTest ({ navigation, route}){
         </View>
         }
   
-        {questions && 
+        {questions && wordsId && 
           <NavigationPanelTest word={true} module={route.params.moduleName} wordsId={wordsId} navigation={navigation}/>
         }
       </View>
     )
+  } catch (error) {
+    console.error(error)
+  }
   }
   
