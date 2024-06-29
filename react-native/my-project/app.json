@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "World IT English",
-    "slug": "World IT English",
+    "slug": "world-it-english",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,7 +12,8 @@
       "backgroundColor": "#313131"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.worldit.english"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,8 +27,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "a149587f-f106-4ecd-84fb-6cbd2d659c42"
+        "projectId": "9a7d3ac3-abfa-4517-88b8-adafba7337d6"
       }
-    }
+    },
+    "owner": "doctor85"
   }
 }

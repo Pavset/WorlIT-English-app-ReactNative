@@ -247,7 +247,7 @@ export default function WordTest ({ navigation, route}){
                     )
                   } else{
                     return (
-                      <Image source={require("../assets/EllipseEmpty.png")} width={22} height={22}/>
+                      <Image source={{uri: "https://i.ibb.co/1QXb9nR/Ellipsegh-5.png"}} width={22} height={22}/>
                     )
                   }
                 })}
