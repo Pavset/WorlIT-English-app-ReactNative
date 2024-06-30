@@ -27,8 +27,14 @@ export default function Account({navigation}){
       .then(
         async data =>{
           if (data.error){
-            setErrorUser(data.error)
-            await navigation.navigate("Register")
+            if (data.error == "Вас немає у курсу"){
+              setErrorUser(data.error)
+              await navigation.navigate("Accept")
+            }else{
+              setErrorUser(data.error)
+              await navigation.navigate("Register")
+            }
+
           } else{
             setUserData(await data.user)
             setTeacherData(await data.teacher)

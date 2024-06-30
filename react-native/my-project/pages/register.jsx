@@ -120,13 +120,13 @@ export default function Register({navigation}) {
             <Text style={[styles.white,styles.font32]}>Реєстрація</Text>
             <TextInput 
               style={styles.input}
-              placeholder="Имя пользователя"
+              placeholder="Ім'я користувача"
               value={username}
               onChangeText={setUsername}
             />
             <TextInput
               style={styles.input}
-              placeholder="Прізвище пользователя"
+              placeholder="Прізвище користувача"
               value={usersurename}
               onChangeText={setUsersurename}
             />
@@ -151,7 +151,7 @@ export default function Register({navigation}) {
             />
             <TextInput
               style={styles.input}
-              placeholder="Електрона адреса"
+              placeholder="Електрона пошта"
               value={emailaddress}
               onChangeText={setEmailaddress}
             />

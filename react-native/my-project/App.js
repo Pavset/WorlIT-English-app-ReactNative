@@ -14,7 +14,7 @@ import Theory from './pages/theory';
 import Words from './pages/words';
 import WordTest from "./pages/wordTest"
 import Error from "./pages/error"
-
+import Accept from './pages/accept'
 const Stack = createNativeStackNavigator()
 
 export const url = "https://worlit-english-app-api.onrender.com"
@@ -38,6 +38,7 @@ export default function App() {
       <Stack.Screen options={{headerShown: false}} name="Words" component={Words}/>
       <Stack.Screen options={{headerShown: false}} name="WordTest" component={WordTest}/>
       <Stack.Screen options={{headerShown: false}} name="Error" component={Error}/>
+      <Stack.Screen options={{headerShown: false}} name="Accept" component={Accept}/>
     </Stack.Navigator>
   </NavigationContainer>
   );
